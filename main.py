@@ -9,7 +9,7 @@ import aiohttp
 
 
 
-TOKEN = 'ODI4MDA1MDgzNzE0ODE0MDAy.YGjR0w.QUZXZ0yGAF9R2H5yM4j6d4XBiXA'
+TOKEN = 'BOT Token'
 bot = commands.Bot(command_prefix='!!')
 
 
