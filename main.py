@@ -311,11 +311,22 @@ async def rrole(ctx, role: discord.Role):
     role = ctx.guild.get_role(role.id)
     try:
         while True:
-            color = imgs.rgb_to_hex((r.randint(100, 200), r.randint(100, 200), r.randint(100, 200)))
+            a = r.randint(0, 255)
+            b = r.randint(0, 255)
+            c = r.randint(0, 255)
+            if a < 200 and b < 200 and c < 200:
+                m = r.randint(1, 3)
+                if m == 1:
+                    a = 255
+                elif m == 2:
+                    b = 255
+                else:
+                    c = 255
+            color = imgs.rgb_to_hex((a, b, c))
             col = int(color, 16)
             colors = discord.Color(col)
             await role.edit(colour=colors)
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.04)
     except Exception as error:
         print(error)
 
@@ -325,9 +336,6 @@ async def chemist(ctx, x, y):
     '''returnrs chemical reaction equation'''
     out = imgs.parser(x, y)
     await ctx.send(out)
-
-
-
 
 
 
