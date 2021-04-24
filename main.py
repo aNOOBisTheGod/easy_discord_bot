@@ -335,7 +335,12 @@ async def rrole(ctx, role: discord.Role):
 async def chemist(ctx, x, y):
     '''returnrs chemical reaction equation'''
     out = imgs.parser(x, y)
-    await ctx.send(out)
+    embed = discord.Embed(
+        title='Done',
+        description=out,
+        colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
+    )
+    await ctx.send(embed=embed)
 
 
 
