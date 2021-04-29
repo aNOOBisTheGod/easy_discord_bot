@@ -341,6 +341,18 @@ async def chemist(ctx, x, y):
         colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
     )
     await ctx.send(embed=embed)
+    
+    
+@bot.command(pass_context = True)
+async def chemistchain(ctx, *, text):
+    '''returnrs chemical reaction chain'''
+    out = imgs.chain(text)
+    embed = discord.Embed(
+        title='Done',
+        description= '\n'.join(out),
+        colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
+    )
+    await ctx.send(embed=embed)
 
 
 
