@@ -1,5 +1,4 @@
 from PIL import Image
-import random as r
 import requests
 from bs4 import BeautifulSoup
 
