@@ -6,10 +6,10 @@ import random as r
 import images as imgs
 from io import BytesIO
 import aiohttp
+from cfg import TOKEN
+import youtube_dl
+import os
 
-
-
-TOKEN = 'BOT Token'
 bot = commands.Bot(command_prefix='!!')
 
 
@@ -341,11 +341,12 @@ async def chemist(ctx, x, y):
         colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
     )
     await ctx.send(embed=embed)
-    
-    
+
+
 @bot.command(pass_context = True)
 async def chemistchain(ctx, *, text):
     '''returnrs chemical reaction chain'''
+    print(100)
     out = imgs.chain(text)
     embed = discord.Embed(
         title='Done',
@@ -353,6 +354,7 @@ async def chemistchain(ctx, *, text):
         colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
     )
     await ctx.send(embed=embed)
+
 
 
 
