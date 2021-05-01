@@ -4,7 +4,17 @@ from bs4 import BeautifulSoup
 
 
 
-def imreverse():
+def imreversep():
+    im = Image.open('savedimage.png')
+    pixels = im.load()
+    x, y = im.size
+    for i in range(x):
+        for j in range(y):
+            pixels[i, j] = (256 - pixels[i, j][0], 256 - pixels[i, j][1], 256 - pixels[i, j][2])
+    im.save('res.png')
+
+
+def imreversej():
     im = Image.open('savedimage.jpg')
     pixels = im.load()
     x, y = im.size
@@ -58,7 +68,9 @@ def chain(text):
             el = str(reaction).split('→')
             el = str(reaction).split('+')
             el = str(reaction).split()
-            if el[0] == x or el[2] == x:
+            z = el[0]
+            z1 = el[2]
+            if z == x or el[2] == x or z[1:] == x or z1[1:] == x:
                 totr = reaction
                 break
         try:
@@ -72,7 +84,7 @@ def chain(text):
         if html.status_code == 200:
             return get_content(html.text)
         else:
-            print('Error')
+            return 'Error'
 
 
     out = []
@@ -80,13 +92,43 @@ def chain(text):
     a = list(text.split())
     for i in range(len(a) - 1):
         c += 1
-        print(out)
         x = a[i]
         y = a[i + 1]
-        url = 'https://tutata.ru/chemistry/search?s=%3D+' + y
-        res = parse()
+        for j in range(10):
+            url = 'https://tutata.ru/chemistry/search?s=%3D+' + y + '&page=' + str(j)
+            res = parse()
+            if res != '?' or res == 'Error':
+                break
         if len(res) == 1:
             out.append(str(c) + ':  ' + '?')
         else:
             out.append(str(c) + ':  ' + ''.join(res)[1:])
     return out
+
+
+def makeanagliphp(delta):
+
+    im = Image.open(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
+    pixels = im.load()
+    x, y = im.size
+
+    for i in range(x):
+        for j in range(y):
+            if i > delta and j > delta:
+                pixels[i - delta, j - delta] = (pixels[i, j][0], pixels[i - delta,
+                                                                        j - delta][1], pixels[i - delta, j - delta][2])
+    im.save("pc.png")
+
+
+def makeanagliphj(delta):
+
+    im = Image.open(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
+    pixels = im.load()
+    x, y = im.size
+
+    for i in range(x):
+        for j in range(y):
+            if i > delta and j > delta:
+                pixels[i - delta, j - delta] = (pixels[i, j][0], pixels[i - delta,
+                                                                        j - delta][1], pixels[i - delta, j - delta][2])
+    im.save("pc.jpg")
