@@ -279,9 +279,14 @@ async def voteunmute(ctx, member : discord.Member, *, arg=None):
 async def reverse(ctx):
     '''reverses image colors    '''
     for attach in ctx.message.attachments:
-        await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.jpg')
-        imgs.imreverse()
-        await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.jpg'))
+        try:
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.png')
+            imgs.imreversep()
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.png'))
+        except:
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.jpg')
+            imgs.imreversej()
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.jpg'))
 
 
 @bot.command()
@@ -335,8 +340,9 @@ async def rrole(ctx, role: discord.Role):
 async def chemist(ctx, x, y):
     '''returnrs chemical reaction equation'''
     out = imgs.parser(x, y)
+    x = bot.get_emoji(837943828505559070)
     embed = discord.Embed(
-        title='Done',
+        title='Done' + ' ' + str(x),
         description=out,
         colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
     )
@@ -346,14 +352,50 @@ async def chemist(ctx, x, y):
 @bot.command(pass_context = True)
 async def chemistchain(ctx, *, text):
     '''returnrs chemical reaction chain'''
-    print(100)
     out = imgs.chain(text)
+    x = bot.get_emoji(837943828505559070)
     embed = discord.Embed(
-        title='Done',
+        title='Done' + ' ' + str(x),
         description= '\n'.join(out),
         colour=discord.Colour.from_rgb(r.randint(200, 255), r.randint(200, 255), r.randint(200, 255))
     )
     await ctx.send(embed=embed)
+
+
+@bot.command(pass_context = True)
+async def emid(ctx):
+    '''returns list of server emojis and their id'''
+    a = []
+    b = []
+    for emoji in ctx.guild.emojis:
+        a.append(str(emoji.id))
+        x = bot.get_emoji(emoji.id)
+        a.append(str(x))
+        embed = discord.Embed(
+            title='Here is the list of server emojis:',
+            description='\n'.join(a),
+            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))
+        )
+    try:
+        await ctx.send(embed=embed)
+    except:
+        await ctx.send(embed=discord.Embed(
+            title='So many emojis!!!',
+            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+
+
+@bot.command()
+async def anagliph(ctx, delta):
+    '''make anagliph'''
+    for attach in ctx.message.attachments:
+        try:
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
+            imgs.makeanagliphp(int(delta))
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.png'))
+        except:
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
+            imgs.makeanagliphj(int(delta))
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.jpg'))
 
 
 
