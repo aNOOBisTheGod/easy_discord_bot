@@ -1,7 +1,18 @@
 from PIL import Image
 import requests
 from bs4 import BeautifulSoup
-
+import aiohttp
+import discord
+from discord.ext import commands
+from discord.utils import get
+import asyncio
+import random as r
+import images as imgs
+from io import BytesIO
+from cfg import TOKEN
+import youtube_dl
+import os
+from pretty_help import DefaultMenu, PrettyHelp
 
 
 def imreversep():
