@@ -9,8 +9,15 @@ import aiohttp
 from cfg import TOKEN
 import youtube_dl
 import os
+from pretty_help import DefaultMenu, PrettyHelp
+
+menu = DefaultMenu(page_left="👍", page_right="👎", remove="a:python:837943828505559070", active_time=5)
+
+ending_note = "The end of {ctx.bot.user.name}'s help command."
 
 bot = commands.Bot(command_prefix='!!')
+
+bot.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 
 
 @bot.command()
@@ -111,29 +118,31 @@ async def leave(ctx):
 @bot.command()
 async def serverinfo(ctx):
     '''information about server'''
-    name = str(ctx.guild.name)
-    description = str(ctx.guild.description)
-    owner = str(ctx.guild.owner)
-    id = str(ctx.guild.id)
-    region = str(ctx.guild.region)
-    memberCount = str(ctx.guild.member_count)
+    server = ctx.message.guild
+    online = 0
+    for i in server.members:
+        if str(i.status) == 'online' or str(i.status) == 'idle' or str(i.status) == 'dnd':
+            online += 1
+    channel_count = len([i for i in server.channels if type(i) == discord.channel.TextChannel])
+    role_count = len(server.roles)
+    emoji_count = len(server.emojis)
+    em = discord.Embed(color=discord.Colour.from_rgb(232,111,108))
+    em.add_field(name='Name', value=server.name)
+    em.add_field(name='Owner', value=server.owner)
+    em.add_field(name='Members', value=server.member_count)
+    em.add_field(name='Currently Online', value=online)
+    em.add_field(name='Text Channels', value=str(channel_count))
+    em.add_field(name='Region', value=server.region)
+    em.add_field(name='Verification Level', value=str(server.verification_level))
+    em.add_field(name='Number of roles', value=str(role_count))
+    em.add_field(name='Number of emotes', value=str(emoji_count))
+    em.add_field(name='Created At', value=server.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S'))
+    em.set_thumbnail(url=server.icon_url)
+    em.set_author(name='Server Info', icon_url='https://cdn.discordapp.com/avatars/828005083714814002' +
+                                               '/ef1f7e01bbbf097a588ef2c78d685ebc.webp?size=1024')
+    em.set_footer(text='Server ID: %s' % server.id)
+    await ctx.send(embed=em)
 
-    icon = str(ctx.guild.icon_url)
-
-    embed = discord.Embed(
-        title=name + " Server Information",
-        description=description,
-        color=discord.Color.blue()
-    )
-    embed.set_thumbnail(url=icon)
-    embed.add_field(name="Owner", value=owner, inline=True)
-    embed.add_field(name="Server ID", value=id, inline=True)
-    embed.add_field(name="Region", value=region, inline=True)
-    embed.add_field(name="Member Count", value=memberCount, inline=True)
-    author = ctx.message.author
-    pfp = author.avatar_url
-    embed.set_footer(text='', icon_url=pfp)
-    await ctx.send(embed=embed)
 
 
 @bot.command()
@@ -331,7 +340,6 @@ async def rrole(ctx, role: discord.Role):
             col = int(color, 16)
             colors = discord.Color(col)
             await role.edit(colour=colors)
-            await asyncio.sleep(0.04)
     except Exception as error:
         print(error)
 
@@ -365,28 +373,62 @@ async def chemistchain(ctx, *, text):
 @bot.command(pass_context = True)
 async def emid(ctx):
     '''returns list of server emojis and their id'''
+    global coun
     a = []
     b = []
+    c = []
     for emoji in ctx.guild.emojis:
-        a.append(str(emoji.id))
         x = bot.get_emoji(emoji.id)
+        a.append('\\' + str(x))
         a.append(str(x))
+    if len(a) > 21:
+        counter = 0
+        for i in range(len(a)):
+            b.append(a[i])
+            if i % 21 == 0 and i != 0:
+                counter += 1
+                embed = discord.Embed(
+                    title='Here is the list of server emojis:',
+                    description='\n'.join(b),
+                    colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))
+                )
+                b = []
+                c.append(embed)
+        message = await ctx.send(embed=c[0])
+        message_id = message.id
+        emoji = '⏩'
+        emoji1 = '⏪'
+        coun = 0
+        await message.add_reaction(emoji1)
+        await message.add_reaction(emoji)
+        @bot.event
+        async def on_raw_reaction_add(payload):
+            global coun
+            if payload.message_id == message_id and payload.emoji.name == '⏩':
+                coun += 1
+            elif payload.message_id == message_id and payload.emoji.name == '⏪':
+                coun -= 1
+            try:
+                await message.edit(embed=c[coun])
+            except:
+                pass
+
+
+    else:
         embed = discord.Embed(
             title='Here is the list of server emojis:',
             description='\n'.join(a),
             colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))
         )
-    try:
         await ctx.send(embed=embed)
-    except:
-        await ctx.send(embed=discord.Embed(
-            title='So many emojis!!!',
-            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+
+
+
 
 
 @bot.command()
 async def anagliph(ctx, delta):
-    '''make anagliph'''
+    '''makes anagliph'''
     for attach in ctx.message.attachments:
         try:
             await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
@@ -396,8 +438,6 @@ async def anagliph(ctx, delta):
             await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
             imgs.makeanagliphj(int(delta))
             await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.jpg'))
-
-
 
 
 @bot.event
