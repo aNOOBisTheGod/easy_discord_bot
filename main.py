@@ -438,6 +438,34 @@ async def anagliph(ctx, delta):
             await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
             imgs.makeanagliphj(int(delta))
             await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.jpg'))
+            
+            
+@bot.command()
+@commands.has_permissions(administrator = True)
+async def changeservericon(ctx, col):
+    '''changes server icon on gradient(admins only)'''
+    guild = ctx.message.guild
+    if col == 'black':
+        imgs.gradientb()
+        with open('gr.png', 'rb') as f:
+            icon = f.read()
+        await ctx.message.delete()
+        await guild.edit(name='Testing', icon=icon)
+    elif col == 'white':
+        imgs.gradientw()
+        with open('gr.png', 'rb') as f:
+            icon = f.read()
+        await ctx.message.delete()
+        await guild.edit(name='Testing', icon=icon)
+    else:
+        await ctx.send(embed=discord.Embed(title='incorrect color!'))
+
+
+@bot.command()
+async def translate(ctx, *, text):
+    '''translates from English to emoji'''
+    print(*imgs.emtranslate(text), sep='\n')
+    await ctx.send(''.join(imgs.emtranslate(text)))
 
 
 @bot.event
