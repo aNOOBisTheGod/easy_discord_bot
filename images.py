@@ -9,9 +9,6 @@ import asyncio
 import random as r
 import images as imgs
 from io import BytesIO
-from cfg import TOKEN
-import youtube_dl
-import os
 from pretty_help import DefaultMenu, PrettyHelp
 
 
