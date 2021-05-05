@@ -143,3 +143,18 @@ def makeanagliphj(delta):
                 pixels[i - delta, j - delta] = (pixels[i, j][0], pixels[i - delta,
                                                                         j - delta][1], pixels[i - delta, j - delta][2])
     im.save("pc.jpg")
+    
+    
+def emtranslate(text):
+    d = {'1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
+         '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '0': 'zero'}
+    a = []
+    text = list(text)
+    for i in text:
+        if i in string.ascii_letters:
+            a.append(':regional_indicator_' + i + ':')
+        elif i in string.digits:
+            a.append(':' + d[str(i)] + ':')
+        else:
+            a.append(':blue_square:')
+    return a
