@@ -174,13 +174,6 @@ async def voting(ctx, *, arg=None):
     await message.add_reaction(emoji1)
 
 
-
-@bot.command()
-async def sendfile(ctx):
-    '''test'''
-    await ctx.send(file=discord.File(r'C:\тут будет все\3799a749d2f405babfc5c2a2d492385c.jpg'))
-
-
 @bot.command()
 @commands.has_permissions(manage_roles = True)
 async def mute(ctx, user : discord.Member, duration = 0,*, unit = None):
@@ -289,13 +282,13 @@ async def reverse(ctx):
     '''reverses image colors    '''
     for attach in ctx.message.attachments:
         try:
-            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.png')
+            await attach.save(r'path to file')
             imgs.imreversep()
-            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.png'))
+            await ctx.send(file=discord.File(r'path to file'))
         except:
-            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.jpg')
+            await attach.save(r'path to file')
             imgs.imreversej()
-            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.jpg'))
+            await ctx.send(file=discord.File(r'path to file'))
 
 
 @bot.command()
@@ -431,13 +424,13 @@ async def anagliph(ctx, delta):
     '''makes anagliph'''
     for attach in ctx.message.attachments:
         try:
-            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
+            await attach.save(r'path to file')
             imgs.makeanagliphp(int(delta))
-            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.png'))
+            await ctx.send(file=discord.File(r'path to file'))
         except:
-            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
+            await attach.save(r'path to file')
             imgs.makeanagliphj(int(delta))
-            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.jpg'))
+            await ctx.send(file=discord.File(r'path to file'))
             
             
 @bot.command()
