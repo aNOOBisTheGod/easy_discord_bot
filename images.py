@@ -1,16 +1,10 @@
+import discord
 from PIL import Image
 import requests
 from bs4 import BeautifulSoup
-import aiohttp
-import discord
-from discord.ext import commands
-from discord.utils import get
-import asyncio
-import random as r
-import images as imgs
-from io import BytesIO
-from pretty_help import DefaultMenu, PrettyHelp
-
+import random as ran
+import string
+import ast
 
 def imreversep():
     im = Image.open('savedimage.png')
@@ -140,8 +134,53 @@ def makeanagliphj(delta):
                 pixels[i - delta, j - delta] = (pixels[i, j][0], pixels[i - delta,
                                                                         j - delta][1], pixels[i - delta, j - delta][2])
     im.save("pc.jpg")
-    
-    
+
+
+def gradientw():
+    ni = Image.new('RGB', (512, 200), (0, 0, 0))
+    pix = ni.load()
+    n = [ran.randint(150, 255), ran.randint(150, 255), ran.randint(150, 255)]
+    n[ran.randint(0, 2)] = 0
+    r = n[0]
+    g = n[1]
+    b = n[2]
+    for i in range(512):
+        if i % 2 == 0:
+            if r < 255:
+                r += 1
+            if g < 255:
+                g += 1
+            if b < 255:
+                b += 1
+        for j in range(200):
+            f = (r, g, b)
+            pix[i, j] = f
+    ni.save("gr.png")
+    return (tuple(n))
+
+
+def gradientb():
+    ni = Image.new('RGB', (512, 200), (0, 0, 0))
+    pix = ni.load()
+    n = [ran.randint(150, 255), ran.randint(150, 255), ran.randint(150, 255)]
+    n[ran.randint(0, 2)] = 0
+    r = n[0]
+    g = n[1]
+    b = n[2]
+    for i in range(512):
+        if i % 2 == 0:
+            if r > 0:
+                r -= 1
+            if g > 0:
+                g -= 1
+            if b > 0:
+                b -= 1
+        for j in range(200):
+            f = (r, g, b)
+            pix[i, j] = f
+    ni.save("gr.png")
+    return(tuple(n))
+
 def emtranslate(text):
     d = {'1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
          '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '0': 'zero'}
@@ -155,3 +194,58 @@ def emtranslate(text):
         else:
             a.append(':blue_square:')
     return a
+
+
+
+class Sendembed:
+    def __init__(self, ctx, channel):
+        self.author = ctx.message.author
+        self.title = ''
+        self.description = ''
+        self.footer = ''
+        self.thumbnail = False
+        self.image = False
+        self.author = ctx.message.author
+        self.channel = channel
+
+    def check(self, channel):
+        if channel == self.channel:
+            return True
+        return False
+
+    def ccheck(self, content):
+        if content.startswith('title:'):
+            self.title = content[7:]
+            print(self.title)
+        elif content.startswith('description:'):
+            self.description = content[13:]
+        elif content.startswith('footer:'):
+            self.footer = content[8:]
+        elif content.startswith('thumbnail:'):
+            self.thumbnail = content[11:]
+        elif content.startswith('image:'):
+            self.image = content[7:]
+        elif content.startswith('channel:'):
+            self.channel = int(content[9:])
+        elif content.startswith('done'):
+            emb = discord.Embed(
+                title=self.title,
+                description=self.description,
+            )
+            emb.set_footer(
+                text=self.footer,
+                icon_url=self.author.avatar_url
+            )
+            if self.image:
+                emb.set_image(
+                    url=self.image
+                )
+            if self.thumbnail:
+                emb.set_thumbnail(
+                    url=self.thumbnail
+                )
+            return emb
+
+    def __call__(self):
+        print(self.channel)
+        return self.channel
