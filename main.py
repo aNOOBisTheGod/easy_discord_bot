@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.utils import get
 import asyncio
 import random as r
+import datetime
 import images as imgs
 from io import BytesIO
 import aiohttp
@@ -10,6 +11,7 @@ from cfg import TOKEN
 import youtube_dl
 import os
 from pretty_help import DefaultMenu, PrettyHelp
+import time
 
 menu = DefaultMenu(page_left="👍", page_right="👎", remove="a:python:837943828505559070", active_time=5)
 
@@ -21,7 +23,7 @@ bot.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 
 
 @bot.command()
-@commands.has_permissions(ban_members = True)
+@commands.has_permissions(administrator = True)
 async def ping(ctx, member : discord.Member, *, t = 10):
     '''ping member by id(staff only)'''
     t = int(t)
@@ -174,6 +176,13 @@ async def voting(ctx, *, arg=None):
     await message.add_reaction(emoji1)
 
 
+
+@bot.command()
+async def sendfile(ctx):
+    '''test'''
+    await ctx.send(file=discord.File(r'C:\тут будет все\3799a749d2f405babfc5c2a2d492385c.jpg'))
+
+
 @bot.command()
 @commands.has_permissions(manage_roles = True)
 async def mute(ctx, user : discord.Member, duration = 0,*, unit = None):
@@ -213,8 +222,8 @@ async def votemute(ctx, member : discord.Member, *, arg=None):
     if x in vc.members:
         c = 0
         embed = discord.Embed(
-        title=f'Should I mute {x} in voice chat for {arg}?',
-        colour=discord.Colour.from_rgb(r.randint(100, 200), r.randint(100, 200), r.randint(100, 200)))
+            title=f'Should I mute {x} in voice chat for {arg}?',
+            colour=discord.Colour.from_rgb(r.randint(100, 200), r.randint(100, 200), r.randint(100, 200)))
         message = await ctx.send(embed=embed)
         message_id = message.id
         emoji = '\N{THUMBS UP SIGN}'
@@ -282,13 +291,13 @@ async def reverse(ctx):
     '''reverses image colors    '''
     for attach in ctx.message.attachments:
         try:
-            await attach.save(r'path to file')
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.png')
             imgs.imreversep()
-            await ctx.send(file=discord.File(r'path to file'))
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.png'))
         except:
-            await attach.save(r'path to file')
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.jpg')
             imgs.imreversej()
-            await ctx.send(file=discord.File(r'path to file'))
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\res.jpg'))
 
 
 @bot.command()
@@ -424,22 +433,65 @@ async def anagliph(ctx, delta):
     '''makes anagliph'''
     for attach in ctx.message.attachments:
         try:
-            await attach.save(r'path to file')
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
             imgs.makeanagliphp(int(delta))
-            await ctx.send(file=discord.File(r'path to file'))
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.png'))
         except:
-            await attach.save(r'path to file')
+            await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.jpg')
             imgs.makeanagliphj(int(delta))
-            await ctx.send(file=discord.File(r'path to file'))
-            
-            
+            await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\pc.jpg'))
+
+
+@bot.command()
+async def changeavatar(ctx, col):
+    '''changes bot's avatar'''
+    if col == 'black':
+        imgs.gradientb()
+    else:
+        imgs.gradientw()
+    with open('gr.png', 'rb') as f:
+        image = f.read()
+    try:
+        await bot.user.edit(avatar=image)
+        await ctx.send(embed=discord.Embed(
+            title='Sucsessful!',
+            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+    except:
+        await ctx.send(embed=discord.Embed(
+            title='Something went wrong(',
+            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+
+@bot.command()
+async def gradient(ctx, col):
+    if col == 'black':
+        cols = imgs.gradientb()
+        file = discord.File("gr.png")
+        embed = discord.Embed(
+        title = 'Sucsessful!',
+        colour = discord.Colour.from_rgb(*cols))
+        embed.set_image(url="attachment://gr.png")
+        await ctx.send(file=file, embed=embed)
+    elif col == 'white':
+        cols = imgs.gradientw()
+        file = discord.File("gr.png")
+        embed = discord.Embed(
+            title='Sucsessful!',
+            colour=discord.Colour.from_rgb(*cols))
+        embed.set_image(url="attachment://gr.png")
+        await ctx.send(file=file, embed=embed)
+    else:
+        await ctx.send(embed=discord.Embed(
+            title='Insert color: black or white',
+            colour=discord.Colour.from_rgb(r.randint(100, 255), r.randint(100, 255), r.randint(100, 255))))
+
+
 @bot.command()
 @commands.has_permissions(administrator = True)
 async def changeservericon(ctx, col):
     '''changes server icon on gradient(admins only)'''
     guild = ctx.message.guild
     if col == 'black':
-        imgs.gradientb()
+        imgs.gradientb()    
         with open('gr.png', 'rb') as f:
             icon = f.read()
         await ctx.message.delete()
@@ -458,13 +510,41 @@ async def changeservericon(ctx, col):
 async def translate(ctx, *, text):
     '''translates from English to emoji'''
     print(*imgs.emtranslate(text), sep='\n')
-    await ctx.send(''.join(imgs.emtranslate(text)))
+    await ctx.send(' '.join(imgs.emtranslate(text)))
+
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def sendembed(ctx, *args):
+    guild = ctx.message.guild
+    await guild.create_text_channel('embed sender')
+    channel = discord.utils.get(ctx.guild.channels, name='embed-sender')
+    print(channel.id)
+    overwrite = channel.overwrites_for(ctx.guild.default_role)
+    overwrite.view_channel = False
+    await channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
+    overwrite = channel.overwrites_for(ctx.guild.default_role)
+    overwrite.view_channel = True
+    await channel.set_permissions(ctx.message.author, overwrite=overwrite)
+    emb = imgs.Sendembed(ctx, channel)
+
+    @bot.event
+    async def on_message(message):
+        if emb.check(message.channel):
+            content = message.content
+            embed = emb.ccheck(content)
+            if embed:
+                await channel.send(embed=embed)
+                await asyncio.sleep(10.0)
+                await channel.delete()
+                chan = emb()
+                await chan.send(embed=embed)
+
 
 
 @bot.event
 async def on_ready():
-    while True:
-        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('!!help || In development...'))
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Game('!!help || In development...'))
 
 
 bot.run(TOKEN)
