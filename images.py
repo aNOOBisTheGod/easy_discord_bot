@@ -4,7 +4,6 @@ import requests
 from bs4 import BeautifulSoup
 import random as ran
 import string
-import ast
 
 def imreversep():
     im = Image.open('savedimage.png')
