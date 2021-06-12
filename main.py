@@ -539,6 +539,7 @@ async def sendembed(ctx, *args):
                 await channel.delete()
                 chan = emb()
                 await chan.send(embed=embed)
+     #now it doesn't work, but I'll try to finish it soon :)
 
 
 
