@@ -516,6 +516,7 @@ async def translate(ctx, *, text):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def sendembed(ctx, *args):
+    '''now in development(admin only)'''
     guild = ctx.message.guild
     await guild.create_text_channel('embed sender')
     channel = discord.utils.get(ctx.guild.channels, name='embed-sender')
@@ -539,8 +540,15 @@ async def sendembed(ctx, *args):
                 await channel.delete()
                 chan = emb()
                 await chan.send(embed=embed)
-     #now it doesn't work, but I'll try to finish it soon :)
 
+
+@bot.command()
+async def invite(ctx):
+    '''use this command to get Bott's invite'''
+    await ctx.send(embed=discord.Embed(description='[Here is the invite](https://discord.com/api/oauth2/'
+                                                   'authorize?client_id=828005083714814002&permissions=8&scope=bot)',
+                                       color = discord.Colour.from_rgb(r.randint(100, 255),
+                                                                       r.randint(100, 255), r.randint(100, 255))))
 
 
 @bot.event
