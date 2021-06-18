@@ -550,6 +550,15 @@ async def invite(ctx):
                                        color = discord.Colour.from_rgb(r.randint(100, 255),
                                                                        r.randint(100, 255), r.randint(100, 255))))
 
+    
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def clear(ctx):
+    guild = ctx.message.guild
+    for i in guild.channels:
+        if 'краш' in str(i) or 'crash' in str(i) or 'КРАШ' in str(i):
+            await i.delete()
+            
 
 @bot.event
 async def on_ready():
