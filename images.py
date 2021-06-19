@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import random as ran
 import string
+import ast
 
 def imreversep():
     im = Image.open('savedimage.png')
@@ -162,7 +163,15 @@ def gradientb():
     ni = Image.new('RGB', (512, 200), (0, 0, 0))
     pix = ni.load()
     n = [ran.randint(150, 255), ran.randint(150, 255), ran.randint(150, 255)]
-    n[ran.randint(0, 2)] = 0
+    x = ran.randint(1, 2)
+    if x == 1:
+        c = ran.randint(0, 2)
+        n[c] = n[c] - ran.randint(50, 150)
+    elif x == 2:
+        c = ran.randint(0, 2)
+        c1 = ran.randint(0, 2)
+        n[c] = n[c] - ran.randint(50, 150)
+        n[c1] = n[c1] - ran.randint(50, 150)
     r = n[0]
     g = n[1]
     b = n[2]
@@ -248,3 +257,11 @@ class Sendembed:
     def __call__(self):
         print(self.channel)
         return self.channel
+
+
+def check_if_en(content):
+    for i in content:
+        if i in string.ascii_letters:
+            return True
+    else:
+        return False
