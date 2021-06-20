@@ -629,21 +629,4 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.idle, activity=discord.Game('!!help || In development...'))
 
 
-# @bot.event
-# async def on_message(message):
-#     guild = message.guild
-#     member = message.author
-#     if len(list(member.roles)) == 1:
-#         for i in guild.roles:
-#             if str(i) == 'Foreigner':
-#                 if imgs.check_if_en(message.content):
-#
-#                     getrole = discord.utils.get(member, id=i.id)
-#                     await member.add_roles(getrole)
-#             if str(i) == 'Russian':
-#                 if not imgs.check_if_en(message.content):
-#                     getrole = discord.utils.get(member, id=i.id)
-#                     await member.add_roles(getrole)
-
-
 bot.run(TOKEN)
