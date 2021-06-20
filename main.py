@@ -11,13 +11,12 @@ from cfg import TOKEN
 import youtube_dl
 import os
 from pretty_help import DefaultMenu, PrettyHelp
-import time
 
 menu = DefaultMenu(page_left="👍", page_right="👎", remove="a:python:837943828505559070", active_time=5)
 
 ending_note = "The end of {ctx.bot.user.name}'s help command."
-
-bot = commands.Bot(command_prefix='!!')
+i = discord.Intents().all()
+bot = commands.Bot(command_prefix='!!', intents=i)
 
 bot.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 
@@ -25,7 +24,7 @@ bot.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def ping(ctx, member: discord.Member, *, t=10):
-    '''ping member by id(staff only)'''
+    """ping member by id(staff only)"""
     t = int(t)
     for i in range(t):
         await ctx.send('<@' + str(member.id) + '>')
@@ -33,20 +32,20 @@ async def ping(ctx, member: discord.Member, *, t=10):
 
 @bot.command()
 async def add(ctx, a: int, b: int):
-    '''slove 1 argument + 2 argument'''
+    """slove 1 argument + 2 argument"""
     await ctx.send(a + b)
 
 
 @bot.command()
 async def info(ctx):
-    '''now its just a test'''
+    """now its just a test"""
     await ctx.send(ctx.guild.members)
 
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member, *, reason=None):
-    '''ban member(staff only)'''
+    """ban member(staff only)"""
     await member.ban(reason=reason)
     await ctx.send(str(member) + ' has been banned!')
 
@@ -54,7 +53,7 @@ async def ban(ctx, member: discord.Member, *, reason=None):
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def kick(ctx, member: discord.Member, *, reason=None):
-    '''kick member(staff only)'''
+    """kick member(staff only)"""
     await member.kick(reason=reason)
     await ctx.send(str(member) + ' has been kicked!')
 
@@ -62,20 +61,20 @@ async def kick(ctx, member: discord.Member, *, reason=None):
 @bot.command()
 @commands.has_permissions(manage_guild=True)
 async def create(ctx, name):
-    '''creates text channel'''
+    """creates text channel"""
     guild = ctx.message.guild
     await guild.create_text_channel(name)
 
 
 @bot.command()
 async def avatar(ctx, member: discord.Member):
-    '''shows avatar of mentioned member'''
+    """shows avatar of mentioned member"""
     await ctx.send(member.avatar_url)
 
 
 @bot.command()
 async def displayembed(ctx, member: discord.Member):
-    '''display embed with mentioned user's avatar'''
+    """display embed with mentioned user's avatar"""
     embed = discord.Embed(
         title='Привет',
         description='Hello',
@@ -87,7 +86,7 @@ async def displayembed(ctx, member: discord.Member):
 
 @bot.command()
 async def send(ctx):
-    '''send bot creator's avatar'''
+    """send bot creator's avatar"""
     await ctx.send('https://images-ext-1.discordapp.net/external/sY0HvQ0FmypS-xYIUcJPCGI-7QgAo-JBvaNOoxVtUDc/%3Fsize' +
                    '%3D1024/https/cdn.discordapp.com/avatars/661157502989238282/a96bb49abd23ac3ddfaea6944746c60f.webp')
 
@@ -95,7 +94,7 @@ async def send(ctx):
 @bot.command()
 @commands.has_permissions(manage_roles=True)
 async def give(ctx, member: discord.Member, role: discord.Role):
-    '''gives member role(staff only)'''
+    """gives member role(staff only)"""
     try:
         getrole = discord.utils.get(ctx.guild.roles, id=role.id)
         await member.add_roles(getrole)
@@ -105,21 +104,21 @@ async def give(ctx, member: discord.Member, role: discord.Role):
 
 @bot.command()
 async def play(ctx):
-    '''bot will join vc'''
+    """bot will join vc"""
     await ctx.author.voice.channel.connect()
     await ctx.message.delete()
 
 
 @bot.command()
 async def leave(ctx):
-    '''bot will leave vc'''
+    """bot will leave vc"""
     await ctx.voice_client.disconnect()
     await ctx.message.delete()
 
 
 @bot.command()
 async def serverinfo(ctx):
-    '''information about server'''
+    """information about server"""
     server = ctx.message.guild
     online = 0
     for i in server.members:
@@ -149,7 +148,7 @@ async def serverinfo(ctx):
 @bot.command()
 @commands.has_permissions(mute_members=True)
 async def vcmute(ctx):
-    '''mute all members in your in vc(staff only)'''
+    """mute all members in your in vc(staff only)"""
     vc = ctx.author.voice.channel
     for member in vc.members:
         await member.edit(mute=True)
@@ -158,7 +157,7 @@ async def vcmute(ctx):
 @bot.command()
 @commands.has_permissions(mute_members=True)
 async def vcunmute(ctx):
-    '''unmute all members in your in vc(staff only)'''
+    """unmute all members in your in vc(staff only)"""
     vc = ctx.author.voice.channel
     for member in vc.members:
         await member.edit(mute=False)
@@ -166,7 +165,7 @@ async def vcunmute(ctx):
 
 @bot.command()
 async def voting(ctx, *, arg=None):
-    '''makes anonymous poll'''
+    """makes anonymous poll"""
     await ctx.message.delete()
     message = await ctx.send(arg)
     emoji = '\N{THUMBS UP SIGN}'
@@ -176,15 +175,9 @@ async def voting(ctx, *, arg=None):
 
 
 @bot.command()
-async def sendfile(ctx):
-    '''test'''
-    await ctx.send(file=discord.File(r'C:\тут будет все\3799a749d2f405babfc5c2a2d492385c.jpg'))
-
-
-@bot.command()
 @commands.has_permissions(manage_roles=True)
 async def mute(ctx, user: discord.Member, duration=0, *, unit=None):
-    '''give member role named MUTED for some time'''
+    """give member role named MUTED for some time"""
     roleobject = discord.utils.get(ctx.message.guild.roles, name='MUTED')
     embed = discord.Embed(
         title=f'{user} was muted for {duration} {unit}',
@@ -209,7 +202,7 @@ async def mute(ctx, user: discord.Member, duration=0, *, unit=None):
 
 @bot.command()
 async def votemute(ctx, member: discord.Member, *, arg=None):
-    '''creates poll to mute member in vc'''
+    """creates poll to mute member in vc"""
     global c
     global message_id
     global users
@@ -227,7 +220,6 @@ async def votemute(ctx, member: discord.Member, *, arg=None):
         emoji = '\N{THUMBS UP SIGN}'
         await message.add_reaction(emoji)
         users = []
-
         @bot.event
         async def on_raw_reaction_add(payload):
             global x
@@ -249,7 +241,7 @@ async def votemute(ctx, member: discord.Member, *, arg=None):
 
 @bot.command()
 async def voteunmute(ctx, member: discord.Member, *, arg=None):
-    '''creates poll to unmute member in vc'''
+    """creates poll to unmute member in vc"""
     global c
     global message_id
     global users
@@ -288,7 +280,7 @@ async def voteunmute(ctx, member: discord.Member, *, arg=None):
 
 @bot.command()
 async def reverse(ctx):
-    '''reverses image colors    '''
+    """reverses image colors"""
     for attach in ctx.message.attachments:
         try:
             await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\savedimage.png')
@@ -303,7 +295,7 @@ async def reverse(ctx):
 @bot.command()
 @commands.has_permissions(manage_emojis=True)
 async def createemoji(ctx, url: str, *, name):
-    '''creates custom emoji(staff only)'''
+    """creates custom emoji(staff only)"""
     async with aiohttp.ClientSession() as ses:
         async with ses.get(url) as r:
             try:
@@ -323,7 +315,7 @@ async def createemoji(ctx, url: str, *, name):
 @bot.command(pass_context=True)
 @commands.has_permissions(manage_roles=True)
 async def rrole(ctx, role: discord.Role):
-    '''makes a kind of a rainbow role'''
+    """makes a kind of a rainbow role"""
     role = ctx.guild.get_role(role.id)
     try:
         while True:
@@ -348,7 +340,7 @@ async def rrole(ctx, role: discord.Role):
 
 @bot.command(pass_context=True)
 async def chemist(ctx, x, y):
-    '''returnrs chemical reaction equation'''
+    """returnrs chemical reaction equation"""
     out = imgs.parser(x, y)
     x = bot.get_emoji(837943828505559070)
     embed = discord.Embed(
@@ -361,7 +353,7 @@ async def chemist(ctx, x, y):
 
 @bot.command(pass_context=True)
 async def chemistchain(ctx, *, text):
-    '''returnrs chemical reaction chain'''
+    """returnrs chemical reaction chain"""
     out = imgs.chain(text)
     x = bot.get_emoji(837943828505559070)
     embed = discord.Embed(
@@ -374,7 +366,7 @@ async def chemistchain(ctx, *, text):
 
 @bot.command(pass_context=True)
 async def emid(ctx):
-    '''returns list of server emojis and their id'''
+    """returns list of server emojis and their id"""
     global coun
     a = []
     b = []
@@ -415,8 +407,6 @@ async def emid(ctx):
                 await message.edit(embed=c[coun])
             except:
                 pass
-
-
     else:
         embed = discord.Embed(
             title='Here is the list of server emojis:',
@@ -428,7 +418,7 @@ async def emid(ctx):
 
 @bot.command()
 async def anagliph(ctx, delta):
-    '''makes anagliph'''
+    """makes anagliph"""
     for attach in ctx.message.attachments:
         try:
             await attach.save(r'C:\Users\anubis\PycharmProjects\discordbot\lol.png')
@@ -442,7 +432,7 @@ async def anagliph(ctx, delta):
 
 @bot.command()
 async def changeavatar(ctx, col):
-    '''changes bot's avatar'''
+    """changes bot's avatar"""
     if col == 'black':
         imgs.gradientb()
     else:
@@ -466,7 +456,7 @@ async def gradient(ctx, col):
         cols = imgs.gradientb()
         file = discord.File("gr.png")
         embed = discord.Embed(
-            title='Sucsessful!',
+            title='Successful!',
             colour=discord.Colour.from_rgb(*cols))
         embed.set_image(url="attachment://gr.png")
         await ctx.send(file=file, embed=embed)
@@ -572,19 +562,35 @@ async def createjoins(ctx):
     await ctx.send(embed=discord.Embed(title='Sucsessful!'))
 
 
-# @bot.command()
-# @commands.has_permissions(administrator=True)
-# async def createchatforvoice(ctx):
-#     guild = ctx.guild
-#     member = ctx.message.author
-#     vc = ctx.author.voice.channel
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def createchatforvoice(ctx, name):
+    guild = ctx.guild
+    try:
+        vc = ctx.author.voice.channel
+        ch = await guild.create_text_channel(f'{vc.name}, {name} ')
+        f = open('channelstodelete.txt')
+        x = f.read()
+        print(x)
+        if str(vc.id) in x:
+            print(x.index(str(vc.id)))
+            await ctx.send(embed=discord.Embed(title='you can create only 1 channel for each voice room'))
+            return 0
+        await ch.set_permissions(guild.default_role, view_channel=False)
+        for i in vc.members:
+            await ch.set_permissions(i, view_channel=True)
+        with open('txtchannels.txt', 'a') as f:
+            f.write(' ' + str(vc.id) + ' ' + str(ch.id) + '\n')
+    except:
+        await ctx.send(embed=discord.Embed(title='You must be in voice chat'))
 
 
-
-
-@bot.event
-async def on_ready():
-    await bot.change_presence(status=discord.Status.idle, activity=discord.Game('!!help || In development...'))
+@bot.command()
+async def mexico(ctx, member: discord.Member):
+    """makes mentioned user mexican human"""
+    await member.avatar_url.save('mexic.jpg')
+    imgs.mexic()
+    await ctx.send(file=discord.File(r'C:\Users\anubis\PycharmProjects\discordbot\mexic.jpg'))
 
 
 @bot.event
@@ -607,6 +613,20 @@ async def on_voice_state_update(member, before, after):
             if str(before.channel.id) in x:
                 if before.channel.members == []:
                     await before.channel.delete()
+            f = open('txtchannels.txt')
+            x = f.read().split()
+            if str(before.channel.id) in x:
+                if before.channel.members == []:
+                    ch = discord.utils.get(member.guild.channels,
+                                           id=int(x[x.index(str(before.channel.id)) + 1]))
+                    await ch.delete()
+
+
+@bot.event
+async def on_ready():
+    print('Bot\'s on. Here is the invite link: https://discord.com/api/oauth2/'
+          'authorize?client_id=828005083714814002&permissions=8&scope=bot')
+    await bot.change_presence(status=discord.Status.idle, activity=discord.Game('!!help || In development...'))
 
 
 # @bot.event
